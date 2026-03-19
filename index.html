@@ -3,1421 +3,1396 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GODMODE Portfolio</title>
+  <title>GAMEPULSE // Gaming News, Esports & Predictions</title>
+  <meta name="description" content="Real-time gaming news, esports coverage, release tracking, and editorial predictions across the gaming industry." />
   <style>
-    :root {
-      --bg: #060816;
-      --bg2: #03050f;
-      --panel: rgba(12, 18, 38, 0.78);
-      --panel-2: rgba(16, 24, 48, 0.85);
-      --text: #ecfaff;
-      --muted: #96abc2;
-      --cyan: #00f7ff;
-      --pink: #ff00c8;
-      --green: #39ff88;
-      --yellow: #ffd54a;
-      --border: rgba(0, 247, 255, 0.16);
-      --shadow-cyan: 0 0 30px rgba(0, 247, 255, 0.12);
-      --shadow-pink: 0 0 30px rgba(255, 0, 200, 0.1);
-      --radius: 24px;
+    :root{
+      --bg:#040712;
+      --bg2:#0b1022;
+      --panel:rgba(9,14,30,.86);
+      --panel2:rgba(15,22,44,.95);
+      --text:#ecf8ff;
+      --muted:#9ab0c7;
+      --cyan:#00f7ff;
+      --pink:#ff00c8;
+      --green:#39ff88;
+      --yellow:#ffd54a;
+      --red:#ff4d6d;
+      --border:rgba(0,247,255,.14);
+      --shadow:0 0 30px rgba(0,247,255,.08);
+      --shadow-pink:0 0 28px rgba(255,0,200,.08);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
     }
 
-    html, body {
-      overflow-x: hidden;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(circle at 20% 20%, rgba(0,247,255,0.06), transparent 18%),
-        radial-gradient(circle at 80% 25%, rgba(255,0,200,0.05), transparent 18%),
-        radial-gradient(circle at 50% 80%, rgba(57,255,136,0.04), transparent 20%),
-        linear-gradient(180deg, #02040c 0%, #050816 55%, #040611 100%);
-      cursor: none;
-      position: relative;
+        radial-gradient(circle at 10% 20%, rgba(0,247,255,.06), transparent 16%),
+        radial-gradient(circle at 85% 15%, rgba(255,0,200,.05), transparent 16%),
+        radial-gradient(circle at 50% 80%, rgba(57,255,136,.04), transparent 20%),
+        linear-gradient(180deg, #02040b 0%, #050816 55%, #03050e 100%);
+      overflow-x:hidden;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    .bg-glow{
+      position:fixed;
+      inset:-20%;
+      z-index:-3;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(0,247,255,.08), transparent 15%),
+        radial-gradient(circle at 80% 20%, rgba(255,0,200,.07), transparent 15%),
+        radial-gradient(circle at 50% 80%, rgba(57,255,136,.05), transparent 15%);
+      filter:blur(18px);
+      animation:floatGlow 14s ease-in-out infinite alternate;
     }
 
-    button {
-      font: inherit;
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: inherit;
+    @keyframes floatGlow{
+      0%{transform:translate(0,0) scale(1);}
+      100%{transform:translate(2%,-2%) scale(1.06);}
     }
 
-    /* =========================
-       CUSTOM CURSOR
-    ========================= */
-    .cursor-dot,
-    .cursor-ring {
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 99999;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-    }
-
-    .cursor-dot {
-      width: 14px;
-      height: 14px;
-      background: radial-gradient(circle, rgba(0,247,255,1), rgba(0,247,255,0.2));
-      box-shadow: 0 0 18px rgba(0,247,255,0.7);
-    }
-
-    .cursor-ring {
-      width: 64px;
-      height: 64px;
-      border: 1px solid rgba(255,0,200,0.25);
-      box-shadow: 0 0 18px rgba(255,0,200,0.08);
-      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
-    }
-
-    .cursor-hover {
-      width: 90px !important;
-      height: 90px !important;
-      border-color: rgba(0,247,255,0.35) !important;
-    }
-
-    /* =========================
-       LOADER / BOOT SCREEN
-    ========================= */
-    #boot {
-      position: fixed;
-      inset: 0;
-      z-index: 100000;
-      background: linear-gradient(180deg, #02040c, #050816);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 18px;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-
-    #boot.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .boot-logo {
-      font-size: clamp(2rem, 8vw, 5rem);
-      font-weight: 900;
-      letter-spacing: 4px;
-      color: var(--cyan);
-      text-transform: uppercase;
-      text-shadow: 0 0 14px rgba(0,247,255,0.9);
-      position: relative;
-      animation: glitch 1.4s infinite;
-    }
-
-    .boot-sub {
-      color: var(--muted);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .boot-bar {
-      width: min(440px, 84vw);
-      height: 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(0,247,255,0.18);
-      overflow: hidden;
-      box-shadow: 0 0 16px rgba(0,247,255,0.08);
-    }
-
-    .boot-fill {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--cyan), var(--pink));
-      box-shadow: 0 0 18px rgba(0,247,255,0.25);
-      animation: loading 3s ease forwards;
-    }
-
-    @keyframes loading {
-      to { width: 100%; }
-    }
-
-    @keyframes glitch {
-      0%, 100% { transform: translate(0); text-shadow: 0 0 14px rgba(0,247,255,0.8); }
-      20% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--pink), -2px 0 var(--cyan); }
-      40% { transform: translate(2px, -1px); }
-      60% { transform: translate(-1px, 2px); }
-      80% { transform: translate(1px, -2px); }
-    }
-
-    /* =========================
-       BACKGROUND EFFECTS
-    ========================= */
-    #particles {
-      position: fixed;
-      inset: 0;
-      z-index: -4;
-      pointer-events: none;
-    }
-
-    .grid {
-      position: fixed;
-      inset: 0;
-      z-index: -3;
-      pointer-events: none;
+    .grid-overlay{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
       background-image:
-        linear-gradient(rgba(0,247,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,247,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.08));
+        linear-gradient(rgba(0,247,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,247,255,.03) 1px, transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,.08));
     }
 
-    .scanlines {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      pointer-events: none;
-      background: repeating-linear-gradient(
+    .scanlines{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background:repeating-linear-gradient(
         to bottom,
-        rgba(255,255,255,0.01) 0px,
-        rgba(255,255,255,0.01) 1px,
-        transparent 2px,
-        transparent 4px
+        rgba(255,255,255,.015),
+        rgba(255,255,255,.015) 1px,
+        transparent 1px,
+        transparent 3px
       );
-      opacity: 0.25;
+      opacity:.2;
     }
 
-    .ambient {
-      position: fixed;
-      inset: -20%;
-      z-index: -5;
-      pointer-events: none;
+    .container{
+      width:min(1320px, 92%);
+      margin:0 auto;
+    }
+
+    .header{
+      position:sticky;
+      top:0;
+      z-index:999;
+      background:rgba(4,7,18,.84);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:16px 0;
+    }
+
+    .logo{
+      font-size:1.45rem;
+      font-weight:900;
+      letter-spacing:2px;
+      color:var(--cyan);
+      text-transform:uppercase;
+      text-shadow:0 0 18px rgba(0,247,255,.35);
+      position:relative;
+      animation:glitchText 4s infinite;
+    }
+
+    @keyframes glitchText{
+      0%,100%{transform:translate(0);}
+      2%{transform:translate(-1px, 1px);}
+      4%{transform:translate(1px, -1px);}
+      6%{transform:translate(0);}
+    }
+
+    nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+    }
+
+    nav a{
+      color:var(--text);
+      text-decoration:none;
+      font-weight:800;
+      font-size:.95rem;
+      transition:.25s ease;
+    }
+
+    nav a:hover{
+      color:var(--pink);
+      text-shadow:0 0 8px rgba(255,0,200,.4);
+    }
+
+    .hero{
+      min-height:88vh;
+      display:flex;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
       background:
-        radial-gradient(circle at 25% 35%, rgba(0,247,255,0.08), transparent 18%),
-        radial-gradient(circle at 75% 25%, rgba(255,0,200,0.07), transparent 18%),
-        radial-gradient(circle at 55% 80%, rgba(57,255,136,0.04), transparent 20%);
-      filter: blur(10px);
-      animation: drift 20s ease-in-out infinite alternate;
+        radial-gradient(circle at 20% 50%, rgba(0,247,255,.08), transparent 25%),
+        radial-gradient(circle at 80% 30%, rgba(255,0,200,.06), transparent 22%);
+      pointer-events:none;
     }
 
-    @keyframes drift {
-      0% { transform: translate(0,0) scale(1); }
-      50% { transform: translate(2%, -2%) scale(1.03); }
-      100% { transform: translate(-2%, 2%) scale(1); }
+    .hero-wrap{
+      position:relative;
+      z-index:2;
+      width:100%;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+      align-items:center;
+      padding:50px 0 30px;
     }
 
-    /* =========================
-       LAYOUT
-    ========================= */
-    .container {
-      width: min(1240px, 92%);
-      margin: 0 auto;
+    .eyebrow, .section-tag{
+      color:var(--pink);
+      text-transform:uppercase;
+      letter-spacing:3px;
+      font-weight:800;
+      font-size:.8rem;
+      margin-bottom:10px;
     }
 
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-cyan);
-      backdrop-filter: blur(12px);
+    .hero h1{
+      font-size:clamp(2.4rem, 7vw, 5.8rem);
+      line-height:1;
+      text-transform:uppercase;
+      color:var(--cyan);
+      margin-bottom:16px;
+      text-shadow:0 0 24px rgba(0,247,255,.18);
     }
 
-    .section {
-      padding: 50px 0;
+    .hero p{
+      color:var(--muted);
+      line-height:1.8;
+      font-size:1.05rem;
+      max-width:760px;
     }
 
-    .section-head {
-      margin-bottom: 24px;
+    .hero-buttons{
+      margin-top:24px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
     }
 
-    .eyebrow {
-      color: var(--pink);
-      font-size: 0.82rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
+    .btn{
+      display:inline-block;
+      text-decoration:none;
+      border:none;
+      cursor:pointer;
+      padding:14px 22px;
+      border-radius:14px;
+      font-weight:900;
+      transition:.25s ease;
+      text-transform:uppercase;
+      letter-spacing:.5px;
     }
 
-    .title {
-      font-size: clamp(2rem, 5vw, 3.8rem);
-      line-height: 1.05;
-      color: var(--cyan);
-      text-transform: uppercase;
-      text-shadow: 0 0 12px rgba(0,247,255,0.28);
+    .btn:hover{
+      transform:translateY(-3px);
     }
 
-    .desc {
-      margin-top: 12px;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 800px;
+    .btn-primary{
+      background:linear-gradient(90deg, var(--cyan), var(--pink));
+      color:#031018;
+      box-shadow:0 0 24px rgba(0,247,255,.18);
     }
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+    .btn-secondary{
+      color:var(--text);
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
     }
 
-    .reveal.show {
-      opacity: 1;
-      transform: translateY(0);
+    .hero-side{
+      display:grid;
+      gap:16px;
     }
 
-    /* =========================
-       NAV
-    ========================= */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(14px);
-      background: rgba(3, 6, 18, 0.72);
-      border-bottom: 1px solid rgba(0,247,255,0.12);
+    .hud-card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      position:relative;
+      overflow:hidden;
     }
 
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      gap: 16px;
+    .hud-card::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-40%;
+      width:30%;
+      height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+      transform:skewX(-20deg);
+      animation:shimmer 5s infinite;
     }
 
-    .logo {
-      font-size: 1.2rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: var(--cyan);
-      text-shadow: 0 0 10px rgba(0,247,255,0.8);
-      white-space: nowrap;
+    @keyframes shimmer{
+      0%{left:-40%;}
+      100%{left:140%;}
     }
 
-    .nav-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    .hud-title{
+      color:var(--cyan);
+      font-size:.8rem;
+      letter-spacing:2px;
+      font-weight:900;
+      text-transform:uppercase;
+      margin-bottom:10px;
     }
 
-    .nav-links a {
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      color: var(--text);
-      transition: 0.25s ease;
-      border: 1px solid transparent;
+    .mini-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
     }
 
-    .nav-links a:hover {
-      color: var(--pink);
-      border-color: rgba(255,0,200,0.25);
-      background: rgba(255,255,255,0.02);
-      text-shadow: 0 0 8px rgba(255,0,200,0.7);
+    .stat{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.05);
+      text-align:center;
     }
 
-    /* =========================
-       HERO
-    ========================= */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 50px 0 30px;
+    .stat strong{
+      display:block;
+      color:var(--cyan);
+      font-size:1.3rem;
+      margin-bottom:4px;
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 24px;
-      align-items: stretch;
+    .stat span{
+      color:var(--muted);
+      font-size:.8rem;
+      font-weight:700;
     }
 
-    .hero-main {
-      padding: 28px;
-      position: relative;
-      overflow: hidden;
+    .ticker{
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+      overflow:hidden;
+      white-space:nowrap;
     }
 
-    .hero-main::before {
-      content: "";
-      position: absolute;
-      top: -25%;
-      right: -15%;
-      width: 280px;
-      height: 280px;
-      background: radial-gradient(circle, rgba(0,247,255,0.14), transparent 60%);
-      filter: blur(10px);
+    .ticker-track{
+      display:inline-block;
+      padding:14px 0;
+      animation:tickerMove 28s linear infinite;
+      font-weight:800;
+      color:var(--text);
     }
 
-    .tag {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,247,255,0.18);
-      color: var(--cyan);
-      font-size: 0.82rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      background: rgba(0,247,255,0.04);
+    .ticker-item{
+      margin-right:42px;
+      color:var(--muted);
     }
 
-    .hero h1 {
-      font-size: clamp(2.6rem, 8vw, 6rem);
-      line-height: 0.95;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      font-weight: 900;
-      letter-spacing: 1px;
+    .ticker-item strong{
+      color:var(--yellow);
+      margin-right:8px;
     }
 
-    .hero h1 span {
-      color: var(--cyan);
-      text-shadow: 0 0 14px rgba(0,247,255,0.85);
+    @keyframes tickerMove{
+      0%{transform:translateX(0);}
+      100%{transform:translateX(-50%);}
     }
 
-    .hero-sub {
-      color: var(--pink);
-      font-size: 1rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 18px;
+    .section{
+      padding:56px 0;
     }
 
-    .hero p {
-      color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 22px;
-      max-width: 720px;
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:24px;
+      flex-wrap:wrap;
     }
 
-    .hero-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 22px;
+    .section-head h2{
+      font-size:clamp(1.8rem, 4vw, 3rem);
+      color:var(--cyan);
+      text-transform:uppercase;
+      margin-bottom:8px;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 18px;
-      border-radius: 14px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      transition: 0.25s ease;
-      border: 1px solid transparent;
+    .section-head p{
+      color:var(--muted);
+      line-height:1.7;
+      max-width:800px;
     }
 
-    .btn-primary {
-      background: linear-gradient(90deg, var(--cyan), var(--pink));
-      color: #050816;
-      box-shadow: 0 0 18px rgba(0,247,255,0.24);
+    .search-bar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 0 28px rgba(255,0,200,0.18);
+    .search-bar input{
+      flex:1;
+      min-width:260px;
+      padding:14px 16px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      outline:none;
     }
 
-    .btn-secondary {
-      background: rgba(255,255,255,0.03);
-      color: var(--text);
-      border-color: rgba(0,247,255,0.18);
+    .filter-buttons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
     }
 
-    .btn-secondary:hover {
-      transform: translateY(-3px);
-      color: var(--pink);
-      border-color: rgba(255,0,200,0.24);
+    .filter-btn{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+      transition:.25s ease;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+    .filter-btn.active,
+    .filter-btn:hover{
+      color:#031018;
+      background:linear-gradient(90deg, var(--cyan), var(--pink));
     }
 
-    .stat {
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.04);
+    .grid{
+      display:grid;
+      gap:20px;
     }
 
-    .stat-label {
-      color: var(--muted);
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+    .grid-2{
+      grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
     }
 
-    .stat-value {
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--green);
-      text-shadow: 0 0 10px rgba(57,255,136,0.35);
+    .grid-3{
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
     }
 
-    .hero-side {
-      padding: 22px;
-      display: grid;
-      gap: 16px;
-      align-content: start;
+    .grid-4{
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
     }
 
-    .hud {
-      background: var(--panel-2);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 18px;
-      padding: 18px;
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      transition:.25s ease;
+      transform-style:preserve-3d;
+      position:relative;
+      overflow:hidden;
     }
 
-    .hud-title {
-      color: var(--cyan);
-      font-size: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
+    .card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(255,0,200,.25);
+      box-shadow:var(--shadow-pink);
     }
 
-    .avatar {
-      height: 140px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--text);
-      border: 1px solid rgba(0,247,255,0.15);
+    .thumb{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.06);
+      margin-bottom:14px;
+    }
+
+    .card h3{
+      color:var(--pink);
+      margin-bottom:10px;
+      line-height:1.3;
+      font-size:1.08rem;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.96rem;
+    }
+
+    .meta{
+      margin-top:12px;
+      color:var(--cyan);
+      font-size:.82rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    .badge{
+      display:inline-block;
+      font-size:.72rem;
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+    }
+
+    .badge-live{
+      background:rgba(255,77,109,.12);
+      color:var(--red);
+      border:1px solid rgba(255,77,109,.28);
+    }
+
+    .badge-hot{
+      background:rgba(255,213,74,.12);
+      color:var(--yellow);
+      border:1px solid rgba(255,213,74,.28);
+    }
+
+    .badge-pro{
+      background:rgba(0,247,255,.1);
+      color:var(--cyan);
+      border:1px solid rgba(0,247,255,.24);
+    }
+
+    .featured-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:20px;
+    }
+
+    .featured-main{
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      justify-content:end;
       background:
-        linear-gradient(135deg, rgba(0,247,255,0.08), rgba(255,0,200,0.08)),
-        radial-gradient(circle at 30% 30%, rgba(0,247,255,0.2), transparent 25%),
-        radial-gradient(circle at 70% 60%, rgba(255,0,200,0.18), transparent 30%);
-      text-shadow: 0 0 12px rgba(0,247,255,0.5);
+        linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,0,0,.78)),
+        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1400&q=80') center/cover;
+      border-radius:24px;
+      padding:28px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
     }
 
-    .bar-top {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      color: var(--muted);
-      font-size: 0.92rem;
+    .featured-main h3{
+      font-size:clamp(1.6rem, 3vw, 2.7rem);
+      color:var(--text);
+      margin-bottom:10px;
+      text-transform:uppercase;
     }
 
-    .bar-top strong {
-      color: var(--yellow);
+    .featured-main p{
+      color:#d4e8f5;
+      line-height:1.8;
+      max-width:760px;
     }
 
-    .bar {
-      width: 100%;
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.05);
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.04);
+    .featured-side{
+      display:grid;
+      gap:16px;
     }
 
-    .bar span {
-      display: block;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--cyan), var(--pink));
-      box-shadow: 0 0 14px rgba(0,247,255,0.2);
+    .story-mini{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
     }
 
-    .status-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
+    .story-mini h4{
+      color:var(--cyan);
+      margin-bottom:8px;
+      line-height:1.4;
+      font-size:1rem;
     }
 
-    .status {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-      font-size: 0.92rem;
+    .story-mini p{
+      color:var(--muted);
+      line-height:1.6;
+      font-size:.92rem;
     }
 
-    .status span:last-child {
-      color: var(--green);
-      font-weight: 700;
-    }
-
-    /* =========================
-       ABOUT + SKILLS
-    ========================= */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-    }
-
-    .card {
-      padding: 24px;
-    }
-
-    .card h3 {
-      margin-bottom: 14px;
-      font-size: 1.2rem;
-      text-transform: uppercase;
-    }
-
-    .card p {
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .skills {
-      display: grid;
-      gap: 16px;
-    }
-
-    .skill {
-      display: grid;
-      gap: 8px;
-    }
-
-    .skill-top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-
-    .skill-top span:last-child {
-      color: var(--green);
-    }
-
-    /* =========================
-       PROJECTS
-    ========================= */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-      perspective: 1000px;
-    }
-
-    .project {
-      padding: 20px;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-      will-change: transform;
-    }
-
-    .project:hover {
-      box-shadow: var(--shadow-pink);
-      border-color: rgba(255,0,200,0.2);
-    }
-
-    .project-top {
-      height: 170px;
-      border-radius: 16px;
-      margin-bottom: 16px;
-      display: grid;
-      place-items: center;
-      text-transform: uppercase;
-      font-weight: 900;
-      color: var(--cyan);
-      letter-spacing: 1px;
-      border: 1px solid rgba(255,255,255,0.05);
+    .esports-banner{
       background:
-        linear-gradient(135deg, rgba(0,247,255,0.12), rgba(255,0,200,0.12)),
-        radial-gradient(circle at 20% 30%, rgba(0,247,255,0.18), transparent 20%),
-        radial-gradient(circle at 70% 60%, rgba(255,0,200,0.18), transparent 25%);
-      text-shadow: 0 0 10px rgba(0,247,255,0.5);
+        linear-gradient(120deg, rgba(0,247,255,.08), rgba(255,0,200,.08)),
+        var(--panel2);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:24px;
+      margin-bottom:20px;
+      box-shadow:var(--shadow);
     }
 
-    .project h3 {
-      margin-bottom: 10px;
-      text-transform: uppercase;
+    .esports-banner h3{
+      color:var(--cyan);
+      margin-bottom:10px;
+      text-transform:uppercase;
+      font-size:1.4rem;
     }
 
-    .project p {
-      color: var(--muted);
-      line-height: 1.7;
+    .prediction{
+      position:relative;
     }
 
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 14px 0 16px;
+    .prediction::before{
+      content:"FORECAST";
+      position:absolute;
+      top:12px;
+      right:12px;
+      font-size:.68rem;
+      font-weight:900;
+      color:rgba(255,255,255,.08);
+      letter-spacing:2px;
     }
 
-    .chip {
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
+    .newsletter{
+      padding:32px 20px;
+      text-align:center;
+      border-radius:24px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
     }
 
-    .project-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .newsletter h2{
+      font-size:clamp(1.8rem, 4vw, 2.8rem);
+      color:var(--cyan);
+      margin-bottom:12px;
+      text-transform:uppercase;
     }
 
-    .small-btn {
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--cyan);
-      border: 1px solid rgba(0,247,255,0.18);
-      background: rgba(255,255,255,0.02);
-      transition: 0.25s ease;
+    .newsletter p{
+      color:var(--muted);
+      line-height:1.7;
+      margin-bottom:18px;
     }
 
-    .small-btn:hover {
-      color: var(--pink);
-      border-color: rgba(255,0,200,0.24);
-      transform: translateY(-2px);
+    .newsletter form{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
     }
 
-    /* =========================
-       QUEST LOG
-    ========================= */
-    .timeline {
-      display: grid;
-      gap: 16px;
+    .newsletter input{
+      width:min(420px, 100%);
+      padding:14px 16px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      outline:none;
     }
 
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 16px;
-      padding: 18px;
-      border-radius: 18px;
-      background: var(--panel);
-      border: 1px solid var(--border);
+    .contact-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:18px;
     }
 
-    .timeline-date {
-      color: var(--yellow);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 0.9rem;
+    .contact-card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:20px;
+      box-shadow:var(--shadow);
     }
 
-    .timeline-item h4 {
-      margin-bottom: 8px;
-      text-transform: uppercase;
+    .contact-card h3{
+      color:var(--cyan);
+      margin-bottom:8px;
+      text-transform:uppercase;
+      font-size:1rem;
     }
 
-    .timeline-item p {
-      color: var(--muted);
-      line-height: 1.7;
+    .contact-card p, .contact-card a{
+      color:var(--muted);
+      text-decoration:none;
+      line-height:1.7;
+      word-break:break-word;
     }
 
-    /* =========================
-       TERMINAL / CONTACT
-    ========================= */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 22px;
+    .footer{
+      margin-top:20px;
+      padding:28px 0;
+      border-top:1px solid rgba(255,255,255,.06);
+      text-align:center;
+      color:var(--muted);
     }
 
-    .terminal {
-      overflow: hidden;
-      border-radius: 22px;
-      background: #020611;
-      border: 1px solid rgba(0,247,255,0.16);
-      box-shadow: var(--shadow-cyan);
+    .reveal{
+      opacity:0;
+      transform:translateY(24px);
+      transition:all .8s ease;
     }
 
-    .terminal-top {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      background: rgba(255,255,255,0.02);
+    .reveal.show{
+      opacity:1;
+      transform:translateY(0);
     }
 
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ff5f56;
-    }
-
-    .dot:nth-child(2) { background: #ffbd2e; }
-    .dot:nth-child(3) { background: #27c93f; }
-
-    .terminal-body {
-      padding: 20px;
-      font-family: "Courier New", monospace;
-      line-height: 1.9;
-      color: var(--green);
-      min-height: 220px;
-      white-space: pre-wrap;
-    }
-
-    .contact-cards {
-      display: grid;
-      gap: 14px;
-    }
-
-    .contact-item {
-      padding: 18px;
-      border-radius: 18px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-    }
-
-    .contact-item h4 {
-      margin-bottom: 8px;
-      color: var(--cyan);
-      text-transform: uppercase;
-      font-size: 0.95rem;
-    }
-
-    .contact-item p,
-    .contact-item a {
-      color: var(--muted);
-      word-break: break-word;
-    }
-
-    .contact-item a:hover {
-      color: var(--pink);
-    }
-
-    /* =========================
-       FOOTER
-    ========================= */
-    footer {
-      padding: 40px 0 50px;
-      text-align: center;
-      color: #7f93aa;
-      font-size: 0.95rem;
-    }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
-    @media (max-width: 1024px) {
-      .hero-grid,
-      .about-grid,
-      .projects-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
+    @media (max-width: 1000px){
+      .hero-wrap,
+      .featured-grid{
+        grid-template-columns:1fr;
       }
 
-      .hero {
-        min-height: auto;
+      .hero{
+        min-height:auto;
+        padding-top:20px;
       }
     }
 
-    @media (max-width: 700px) {
-      body {
-        cursor: auto;
+    @media (max-width: 768px){
+      .nav{
+        flex-direction:column;
+        align-items:flex-start;
       }
 
-      .cursor-dot,
-      .cursor-ring {
-        display: none;
+      nav{
+        gap:10px;
       }
 
-      .nav {
-        flex-direction: column;
-        align-items: flex-start;
+      .mini-stats{
+        grid-template-columns:1fr;
       }
 
-      .nav-links {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .hero-main,
-      .hero-side,
-      .card,
-      .project {
-        padding: 18px;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .timeline-item {
-        grid-template-columns: 1fr;
-      }
-
-      .project-top {
-        height: 150px;
+      .featured-main{
+        min-height:320px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- BOOT SCREEN -->
-  <div id="boot">
-    <div class="boot-logo">YOURNAME.EXE</div>
-    <div class="boot-sub">Initializing portfolio systems...</div>
-    <div class="boot-bar">
-      <div class="boot-fill"></div>
-    </div>
-  </div>
-
-  <!-- CURSOR -->
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
-
-  <!-- BACKGROUND -->
-  <canvas id="particles"></canvas>
-  <div class="ambient"></div>
-  <div class="grid"></div>
+  <div class="bg-glow"></div>
+  <div class="grid-overlay"></div>
   <div class="scanlines"></div>
 
-  <!-- NAV -->
-  <header>
+  <header class="header">
     <div class="container nav">
-      <a href="#" class="logo">YOURNAME.EXE</a>
-      <nav class="nav-links">
-        <a href="#about">Player Data</a>
-        <a href="#projects">Missions</a>
-        <a href="#timeline">Quest Log</a>
-        <a href="#contact">Terminal</a>
+      <div class="logo">GAMEPULSE</div>
+      <nav>
+        <a href="#top-stories">Top Stories</a>
+        <a href="#news-feed">News</a>
+        <a href="#trending">Trending</a>
+        <a href="#releases">Releases</a>
+        <a href="#esports">Esports</a>
+        <a href="#predictions">Predictions</a>
+        <a href="#contact">Contact</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="panel hero-main reveal">
-          <div class="tag">System Online // Portfolio Loaded</div>
-          <h1>CYBERPUNK <span>GODMODE</span></h1>
-          <div class="hero-sub">Developer • Creator • Gamer • Future Legend</div>
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <p class="eyebrow">Live Coverage // Gaming, Esports & Industry Watch</p>
+        <h1>Real-Time Gaming News For The Next Era</h1>
+        <p>
+          Breaking headlines, esports coverage, release tracking, and editorial forecasts across console, PC, mobile, and competitive gaming — all in one fast-moving hub built for the modern gaming audience.
+        </p>
+        <div class="hero-buttons">
+          <a href="#news-feed" class="btn btn-primary">View Live Feed</a>
+          <a href="#predictions" class="btn btn-secondary">Market Watch</a>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <div class="hud-card">
+          <div class="hud-title">Live Dashboard</div>
+          <div class="mini-stats">
+            <div class="stat">
+              <strong id="countNews">0</strong>
+              <span>Stories</span>
+            </div>
+            <div class="stat">
+              <strong id="countGames">0</strong>
+              <span>Trending</span>
+            </div>
+            <div class="stat">
+              <strong id="countEvents">0</strong>
+              <span>Events</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-card">
+          <div class="hud-title">Coverage Focus</div>
+          <p style="color: var(--muted); line-height: 1.8;">
+            AAA launches, live-service updates, esports storylines, showcase season predictions, patch watch, platform trends, and major publisher movement.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-item"><strong>LIVE:</strong> Major FPS balance update expected within active seasonal cycle.</span>
+      <span class="ticker-item"><strong>HOT:</strong> Showcase season speculation intensifies across major publishers.</span>
+      <span class="ticker-item"><strong>TREND:</strong> Competitive shooters continue to dominate cross-platform engagement.</span>
+      <span class="ticker-item"><strong>WATCH:</strong> Open-world RPG delay risk remains a key market talking point.</span>
+      <span class="ticker-item"><strong>ESPORTS:</strong> Regional qualifiers and playoff pushes reshape tournament momentum.</span>
+      <span class="ticker-item"><strong>LIVE:</strong> Major FPS balance update expected within active seasonal cycle.</span>
+      <span class="ticker-item"><strong>HOT:</strong> Showcase season speculation intensifies across major publishers.</span>
+      <span class="ticker-item"><strong>TREND:</strong> Competitive shooters continue to dominate cross-platform engagement.</span>
+      <span class="ticker-item"><strong>WATCH:</strong> Open-world RPG delay risk remains a key market talking point.</span>
+      <span class="ticker-item"><strong>ESPORTS:</strong> Regional qualifiers and playoff pushes reshape tournament momentum.</span>
+    </div>
+  </div>
+
+  <main class="container">
+    <section id="top-stories" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Featured Coverage</p>
+          <h2>Top Stories</h2>
+          <p>Headline-driven coverage spotlighting major releases, platform updates, competitive scenes, and live-service shifts.</p>
+        </div>
+      </div>
+
+      <div class="featured-grid">
+        <div class="featured-main">
+          <span class="badge badge-live">Featured Analysis</span>
+          <h3>Why the next wave of live-service updates could define the year</h3>
           <p>
-            Welcome to my next-level portfolio. I’m building websites, learning code,
-            and shipping projects like missions in a game. Every deploy is a level-up.
-            Every new feature is more XP. This is not just a website — it’s my player profile.
-          </p>
-
-          <div class="hero-buttons">
-            <a href="#projects" class="btn btn-primary">⚡ View Missions</a>
-            <a href="#contact" class="btn btn-secondary">📡 Connect</a>
-          </div>
-
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-label">Current Level</div>
-              <div class="stat-value" data-count="12">0</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">XP Earned</div>
-              <div class="stat-value" data-count="2480">0</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Projects Deployed</div>
-              <div class="stat-value" data-count="4">0</div>
-            </div>
-          </div>
-        </div>
-
-        <aside class="panel hero-side reveal">
-          <div class="hud">
-            <div class="hud-title">Player Avatar</div>
-            <div class="avatar">PLAYER_01</div>
-          </div>
-
-          <div class="hud">
-            <div class="hud-title">Rank Progress</div>
-            <div class="bar-top">
-              <span>Rank</span>
-              <strong>Rookie // Rising</strong>
-            </div>
-            <div class="bar"><span style="width: 72%"></span></div>
-
-            <div class="status-list">
-              <div class="status"><span>Frontend Training</span><span>ACTIVE</span></div>
-              <div class="status"><span>GitHub Missions</span><span>ONLINE</span></div>
-              <div class="status"><span>Netlify Deployments</span><span>STABLE</span></div>
-            </div>
-          </div>
-
-          <div class="hud">
-            <div class="hud-title">Loadout</div>
-            <div class="status-list">
-              <div class="status"><span>HTML</span><span>Equipped</span></div>
-              <div class="status"><span>CSS</span><span>Equipped</span></div>
-              <div class="status"><span>JavaScript</span><span>Unlocking...</span></div>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Player Data</div>
-          <h2 class="title">About The Operator</h2>
-          <p class="desc">
-            I’m a beginner web developer with a gamer mindset. I love building cool websites,
-            learning new skills, and turning ideas into real projects. This portfolio is my base,
-            and I’ll keep upgrading it as I level up.
+            Between balance patches, content roadmap resets, and player retention pressure, the current update cycle is shaping up to be one of the most important periods for multiplayer and competitive gaming.
           </p>
         </div>
 
-        <div class="about-grid">
-          <div class="panel card reveal">
-            <h3>Operator Bio</h3>
-            <p>
-              I started by deploying my first website with GitHub and Netlify, and now I’m moving into
-              stronger design, animations, interactivity, and gaming-inspired UI. My goal is to create
-              sites that look memorable and feel like an experience.
-            </p>
+        <div class="featured-side">
+          <div class="story-mini">
+            <span class="badge badge-hot">Trending</span>
+            <h4>Competitive shooters continue to lead engagement across console and PC</h4>
+            <p>High player retention, creator visibility, and frequent update cadence keep the genre dominant in the current cycle.</p>
           </div>
 
-          <div class="panel card reveal">
-            <h3>Skill Matrix</h3>
-            <div class="skills">
-              <div class="skill">
-                <div class="skill-top"><span>HTML</span><span>85%</span></div>
-                <div class="bar"><span style="width: 85%"></span></div>
-              </div>
-              <div class="skill">
-                <div class="skill-top"><span>CSS</span><span>80%</span></div>
-                <div class="bar"><span style="width: 80%"></span></div>
-              </div>
-              <div class="skill">
-                <div class="skill-top"><span>Git / GitHub</span><span>72%</span></div>
-                <div class="bar"><span style="width: 72%"></span></div>
-              </div>
-              <div class="skill">
-                <div class="skill-top"><span>Netlify</span><span>78%</span></div>
-                <div class="bar"><span style="width: 78%"></span></div>
-              </div>
-              <div class="skill">
-                <div class="skill-top"><span>JavaScript</span><span>50%</span></div>
-                <div class="bar"><span style="width: 50%"></span></div>
-              </div>
-            </div>
+          <div class="story-mini">
+            <span class="badge badge-pro">Industry Watch</span>
+            <h4>Mid-year showcase windows expected to drive reveal momentum</h4>
+            <p>Studios and publishers typically increase trailer drops, gameplay demos, and roadmap announcements around key event periods.</p>
+          </div>
+
+          <div class="story-mini">
+            <span class="badge badge-live">Patch Watch</span>
+            <h4>Seasonal balance passes remain the biggest short-term story for esports ecosystems</h4>
+            <p>Meta changes can rapidly alter team viability, player roles, and tournament outcomes.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Mission Board</div>
-          <h2 class="title">Current Missions</h2>
-          <p class="desc">
-            These are the projects I’m building and upgrading as I gain XP.
-          </p>
-        </div>
+    <section id="news-feed" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Breaking Feed</p>
+          <h2>Live News Feed</h2>
+          <p>Search and filter through current gaming stories, update coverage, release watch, and industry movement.</p>
 
-        <div class="projects-grid">
-          <div class="panel project reveal tilt">
-            <div class="project-top">Mission 01</div>
-            <h3>First Live Website</h3>
-            <p>My first deployed website using GitHub + Netlify — the first major checkpoint in my dev journey.</p>
-            <div class="chips">
-              <span class="chip">HTML</span>
-              <span class="chip">CSS</span>
-              <span class="chip">Deployment</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="small-btn">Live Site</a>
-              <a href="#" class="small-btn">Source Code</a>
-            </div>
+          <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search stories, games, genres, esports..." />
           </div>
 
-          <div class="panel project reveal tilt">
-            <div class="project-top">Mission 02</div>
-            <h3>Cyberpunk Portfolio</h3>
-            <p>A neon gamer-style portfolio with HUD panels, mission cards, XP stats, and interactive effects.</p>
-            <div class="chips">
-              <span class="chip">Portfolio</span>
-              <span class="chip">Gaming UI</span>
-              <span class="chip">Responsive</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="small-btn">Live Demo</a>
-              <a href="#" class="small-btn">GitHub Repo</a>
-            </div>
-          </div>
-
-          <div class="panel project reveal tilt">
-            <div class="project-top">Mission 03</div>
-            <h3>Future Game Hub</h3>
-            <p>A future project with more JavaScript, animations, and interactive features as my skills grow.</p>
-            <div class="chips">
-              <span class="chip">JavaScript</span>
-              <span class="chip">Planned</span>
-              <span class="chip">Next Level</span>
-            </div>
-            <div class="project-links">
-              <a href="#" class="small-btn">Coming Soon</a>
-              <a href="#" class="small-btn">Roadmap</a>
-            </div>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="fps">FPS</button>
+            <button class="filter-btn" data-filter="rpg">RPG</button>
+            <button class="filter-btn" data-filter="esports">Esports</button>
+            <button class="filter-btn" data-filter="mobile">Mobile</button>
+            <button class="filter-btn" data-filter="industry">Industry</button>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- TIMELINE -->
-    <section id="timeline" class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Quest Log</div>
-          <h2 class="title">Progress Timeline</h2>
-          <p class="desc">
-            Every step is a level gained.
-          </p>
-        </div>
-
-        <div class="timeline">
-          <div class="timeline-item reveal">
-            <div class="timeline-date">Level 01</div>
-            <div>
-              <h4>Deployed First Website</h4>
-              <p>Connected GitHub to Netlify and successfully launched my first live website.</p>
-            </div>
-          </div>
-
-          <div class="timeline-item reveal">
-            <div class="timeline-date">Level 02</div>
-            <div>
-              <h4>Upgraded UI Design</h4>
-              <p>Replaced the basic starter page with a custom-designed homepage and stronger layout.</p>
-            </div>
-          </div>
-
-          <div class="timeline-item reveal">
-            <div class="timeline-date">Level 03</div>
-            <div>
-              <h4>Built Gamer Portfolio</h4>
-              <p>Created a cyberpunk portfolio to show style, creativity, and progress.</p>
-            </div>
-          </div>
-
-          <div class="timeline-item reveal">
-            <div class="timeline-date">Next</div>
-            <div>
-              <h4>Unlock JavaScript Powers</h4>
-              <p>Add more interactivity, mini games, and advanced motion effects.</p>
-            </div>
-          </div>
-        </div>
+      <div class="grid grid-3" id="newsGrid">
+        <!-- JS inject -->
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Communication Terminal</div>
-          <h2 class="title">Connect To The Server</h2>
-          <p class="desc">
-            Want to collaborate or follow my progress? Use the terminal below.
-          </p>
+    <section id="trending" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Popular Now</p>
+          <h2>Trending Games</h2>
+          <p>High-visibility titles driving discussion across competitive scenes, live-service updates, and major player communities.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-4" id="trendingGrid">
+        <!-- JS inject -->
+      </div>
+    </section>
+
+    <section id="releases" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Release Radar</p>
+          <h2>Upcoming Releases</h2>
+          <p>Key launch windows, release watch coverage, and notable projects being tracked by the gaming audience.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3" id="releasesGrid">
+        <!-- JS inject -->
+      </div>
+    </section>
+
+    <section id="esports" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Competitive Coverage</p>
+          <h2>Esports Central</h2>
+          <p>Major tournament momentum, playoff watch, meta shifts, and competitive ecosystem analysis across active scenes.</p>
+        </div>
+      </div>
+
+      <div class="esports-banner">
+        <h3>Current Esports Outlook</h3>
+        <p style="color: var(--muted); line-height: 1.8;">
+          Competitive scenes remain highly reactive to patch cadence, roster movement, and seasonal scheduling. Expect momentum swings as playoff windows approach and late-stage qualifiers intensify.
+        </p>
+      </div>
+
+      <div class="grid grid-3" id="esportsGrid">
+        <!-- JS inject -->
+      </div>
+    </section>
+
+    <section id="predictions" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Editorial Forecast</p>
+          <h2>Predictions & Market Watch</h2>
+          <p>Clearly labeled editorial predictions based on release cycles, patch timing, showcase windows, competitive trends, and audience sentiment. These are not confirmed announcements.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3" id="predictionsGrid">
+        <!-- JS inject -->
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="newsletter">
+        <p class="section-tag">Stay Updated</p>
+        <h2>Subscribe To The Gaming Feed</h2>
+        <p>
+          Receive headline alerts, esports updates, release watch reports, and editorial market forecasts across the gaming industry.
+        </p>
+        <form onsubmit="event.preventDefault(); fakeSubscribe();">
+          <input type="email" id="newsletterEmail" placeholder="Enter your email address" required />
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <p id="subscribeMsg" style="margin-top: 14px; color: var(--green); display: none; font-weight: 800;">
+          Subscription request received.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+      <div class="section-head">
+        <div>
+          <p class="section-tag">Contact & Submissions</p>
+          <h2>Editorial Contact</h2>
+          <p>For press enquiries, community reports, gaming tips, esports coverage requests, and partnership discussions.</p>
+        </div>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Press & Partnerships</h3>
+          <a href="mailto:24rileyda@greigcityacademy.co.uk">24rileyda@greigcityacademy.co.uk</a>
         </div>
 
-        <div class="contact-grid">
-          <div class="terminal reveal">
-            <div class="terminal-top">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            <div class="terminal-body" id="typewriter"></div>
-          </div>
+        <div class="contact-card">
+          <h3>News Tips & Story Submissions</h3>
+          <a href="mailto:24rileyda@greigcityacademy.co.uk?subject=Gaming%20News%20Tip">24rileyda@greigcityacademy.co.uk</a>
+        </div>
 
-          <div class="contact-cards">
-            <div class="contact-item reveal">
-              <h4>Email</h4>
-              <p><a href="mailto:youremail@example.com">youremail@example.com</a></p>
-            </div>
+        <div class="contact-card">
+          <h3>Community Discord</h3>
+          <p>NLnja3430</p>
+        </div>
 
-            <div class="contact-item reveal">
-              <h4>GitHub</h4>
-              <p><a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
-            </div>
-
-            <div class="contact-item reveal">
-              <h4>Discord / Social</h4>
-              <p>Add your Discord, TikTok, Instagram, Twitch, or YouTube here.</p>
-            </div>
-
-            <div class="contact-item reveal">
-              <h4>Status</h4>
-              <p>🟢 Online — Building, learning, and shipping new projects.</p>
-            </div>
-          </div>
+        <div class="contact-card">
+          <h3>Coverage Requests</h3>
+          <p>Game launches, live-service updates, tournament tracking, and platform trend watch.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
+  <footer class="footer">
     <div class="container">
-      © 2026 YOURNAME.EXE // Powered by GitHub + Netlify // System Stable 🎮
+      <p>© 2026 GAMEPULSE // Gaming News, Esports, Releases & Editorial Forecasts</p>
     </div>
   </footer>
 
   <script>
-    /* =========================
-       BOOT SCREEN
-    ========================= */
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        document.getElementById("boot").classList.add("hidden");
-      }, 3200);
-    });
+    // =========================
+    // DATA
+    // =========================
 
-    /* =========================
-       CUSTOM CURSOR
-    ========================= */
-    const dot = document.querySelector(".cursor-dot");
-    const ring = document.querySelector(".cursor-ring");
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-
-    document.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      dot.style.left = mouseX + "px";
-      dot.style.top = mouseY + "px";
-    });
-
-    function animateRing() {
-      ringX += (mouseX - ringX) * 0.15;
-      ringY += (mouseY - ringY) * 0.15;
-      ring.style.left = ringX + "px";
-      ring.style.top = ringY + "px";
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    document.querySelectorAll("a, button, .btn, .small-btn, .project").forEach(el => {
-      el.addEventListener("mouseenter", () => ring.classList.add("cursor-hover"));
-      el.addEventListener("mouseleave", () => ring.classList.remove("cursor-hover"));
-    });
-
-    /* =========================
-       PARTICLES BACKGROUND
-    ========================= */
-    const canvas = document.getElementById("particles");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    function createParticles() {
-      particles = [];
-      const count = Math.min(90, Math.floor(window.innerWidth / 18));
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 2 + 0.6,
-          dx: (Math.random() - 0.5) * 0.25,
-          dy: (Math.random() - 0.5) * 0.25,
-          alpha: Math.random() * 0.6 + 0.2
-        });
+    const newsData = [
+      {
+        title: "Major FPS seasonal patch expected to reshape ranked meta",
+        description: "With competitive balance concerns rising and seasonal cadence aligning, analysts expect a notable update window for at least one major shooter in the coming weeks.",
+        tag: "fps",
+        badge: "Live Update",
+        badgeClass: "badge-live",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Open-world RPG release windows face growing schedule pressure",
+        description: "Large-scale RPG projects with limited gameplay visibility often enter high-risk timing zones as marketing quiet periods continue.",
+        tag: "rpg",
+        badge: "Market Watch",
+        badgeClass: "badge-pro",
+        image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Esports playoff races intensify as qualifier season reaches critical stage",
+        description: "Regional qualification paths are narrowing, creating a volatile landscape for late-stage tournament entries and surprise contenders.",
+        tag: "esports",
+        badge: "Tournament Watch",
+        badgeClass: "badge-hot",
+        image: "https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Mobile gaming continues to expand through live-event and crossover strategy",
+        description: "Engagement models built around timed events, creator campaigns, and cosmetic drops continue to push visibility across mobile ecosystems.",
+        tag: "mobile",
+        badge: "Mobile Focus",
+        badgeClass: "badge-pro",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Publisher showcase speculation rises ahead of mid-year reveal cycle",
+        description: "Historically, this period sees increased trailer drops, gameplay reveals, roadmap updates, and first-look teases across the industry.",
+        tag: "industry",
+        badge: "Industry Watch",
+        badgeClass: "badge-live",
+        image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Live-service player retention remains the key battle for major multiplayer titles",
+        description: "Studios continue to rely on event cadence, progression refreshes, and content rotation to sustain player interest and long-term monetization.",
+        tag: "industry",
+        badge: "Trend Report",
+        badgeClass: "badge-hot",
+        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80"
       }
-    }
-    createParticles();
-    window.addEventListener("resize", createParticles);
-
-    function drawParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (let p of particles) {
-        p.x += p.dx;
-        p.y += p.dy;
-
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0,247,255,${p.alpha})`;
-        ctx.fill();
-      }
-
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
-          const dist = Math.hypot(a.x - b.x, a.y - b.y);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(255,0,200,${0.05 * (1 - dist / 120)})`;
-            ctx.stroke();
-          }
-        }
-      }
-
-      requestAnimationFrame(drawParticles);
-    }
-    drawParticles();
-
-    /* =========================
-       REVEAL ON SCROLL
-    ========================= */
-    const reveals = document.querySelectorAll(".reveal");
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-        }
-      });
-    }, { threshold: 0.15 });
-
-    reveals.forEach(el => revealObserver.observe(el));
-
-    /* =========================
-       COUNTER ANIMATION
-    ========================= */
-    const counters = document.querySelectorAll("[data-count]");
-    let countersStarted = false;
-
-    function animateCounter(el, target) {
-      let current = 0;
-      const duration = 1500;
-      const start = performance.now();
-
-      function update(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        current = Math.floor(progress * target);
-        el.textContent = current.toLocaleString();
-        if (progress < 1) requestAnimationFrame(update);
-      }
-
-      requestAnimationFrame(update);
-    }
-
-    const heroStats = document.querySelector(".stats");
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !countersStarted) {
-          countersStarted = true;
-          counters.forEach(counter => {
-            animateCounter(counter, parseInt(counter.dataset.count));
-          });
-        }
-      });
-    }, { threshold: 0.5 });
-
-    if (heroStats) counterObserver.observe(heroStats);
-
-    /* =========================
-       TYPEWRITER TERMINAL
-    ========================= */
-    const terminalText = [
-      "user@portfolio:~$ whoami",
-      "godmode-web-dev",
-      "user@portfolio:~$ skills --list",
-      "html css github netlify javascript",
-      "user@portfolio:~$ status --current",
-      "building • learning • deploying",
-      "user@portfolio:~$ connect --open",
-      "server online... awaiting transmission."
     ];
 
-    const typewriter = document.getElementById("typewriter");
-    let lineIndex = 0;
-    let charIndex = 0;
-
-    function typeLine() {
-      if (!typewriter) return;
-
-      if (lineIndex < terminalText.length) {
-        const currentLine = terminalText[lineIndex];
-
-        if (charIndex < currentLine.length) {
-          typewriter.textContent += currentLine.charAt(charIndex);
-          charIndex++;
-          setTimeout(typeLine, 35);
-        } else {
-          typewriter.textContent += "\n";
-          lineIndex++;
-          charIndex = 0;
-          setTimeout(typeLine, 300);
-        }
+    const trendingGames = [
+      {
+        name: "Valorant",
+        desc: "High competitive engagement, constant balance watch, and creator visibility keep it in the spotlight.",
+        meta: "FPS // Tactical Shooter",
+        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "Fortnite",
+        desc: "Crossovers, live events, and creator-driven momentum continue to make it one of the most visible live-service games.",
+        meta: "Battle Royale // Live Events",
+        image: "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "EA Sports FC",
+        desc: "Seasonal modes, competitive relevance, and consistent player engagement keep sports gaming active year-round.",
+        meta: "Sports // Competitive",
+        image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "Call of Duty",
+        desc: "Patch timing, seasonal content, and esports overlap maintain strong visibility across console and PC.",
+        meta: "FPS // Live Service",
+        image: "https://images.unsplash.com/photo-1603481546238-487240415921?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "Minecraft",
+        desc: "Massive evergreen audience, update curiosity, and creator culture sustain long-term relevance.",
+        meta: "Sandbox // Community",
+        image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "Apex Legends",
+        desc: "Legend balance, ranked ecosystem, and esports storylines continue to drive active discussion.",
+        meta: "Battle Royale // Esports",
+        image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "Genshin Impact",
+        desc: "Event cadence, character banners, and update speculation keep the audience highly engaged.",
+        meta: "RPG // Live Events",
+        image: "https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        name: "Rocket League",
+        desc: "Competitive accessibility and strong esports identity continue to support long-term community retention.",
+        meta: "Sports // Esports",
+        image: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=1200&q=80"
       }
+    ];
+
+    const releasesData = [
+      {
+        title: "Untitled Open-World RPG Project",
+        desc: "High audience watch due to limited gameplay visibility and increasing speculation around launch timing.",
+        meta: "Expected Window // TBA",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Next-Gen Competitive Arena Shooter",
+        desc: "Publisher reveal patterns suggest competitive-first positioning with early esports potential.",
+        meta: "Reveal Cycle // Watchlist",
+        image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Major Franchise Expansion Release",
+        desc: "Expansion-style launches remain a strong retention tool for long-running live-service ecosystems.",
+        meta: "Expansion Watch // Seasonal",
+        image: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Sci-Fi Extraction Shooter",
+        desc: "Audience curiosity remains high as extraction-based gameplay continues to gain traction in multiplayer spaces.",
+        meta: "Genre Trend // Rising",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Story-Driven Action RPG",
+        desc: "Narrative-heavy RPGs remain a strong draw, but marketing silence often increases delay speculation.",
+        meta: "Launch Watch // High Interest",
+        image: "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        title: "Cross-Platform Mobile MMO Update",
+        desc: "Large content expansions can act like pseudo-launches, significantly boosting community re-engagement.",
+        meta: "Content Expansion // Mobile",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
+      }
+    ];
+
+    const esportsData = [
+      {
+        title: "Regional playoff races enter decisive phase",
+        desc: "Late-stage qualification battles are intensifying, with seeding pressure and momentum becoming major talking points.",
+        meta: "Playoff Watch"
+      },
+      {
+        title: "Patch timing could redefine current tournament meta",
+        desc: "Even minor balancing changes can heavily affect role priorities, composition strength, and team adaptability.",
+        meta: "Meta Shift"
+      },
+      {
+        title: "Roster move speculation increases before major event window",
+        desc: "Pre-event reshuffles often accelerate when underperforming teams seek rapid identity changes.",
+        meta: "Roster Watch"
+      },
+      {
+        title: "Creator and co-stream ecosystems continue boosting event visibility",
+        desc: "Community-led broadcast momentum remains a major growth factor for competitive title reach.",
+        meta: "Audience Growth"
+      },
+      {
+        title: "Underdog teams remain key storylines heading into qualifiers",
+        desc: "Smaller organizations continue to capitalize on instability in established team structures.",
+        meta: "Upset Potential"
+      },
+      {
+        title: "Cross-title esports scheduling congestion remains a challenge",
+        desc: "Tournament overlap can dilute viewership concentration and complicate sponsor activation cycles.",
+        meta: "Industry Pressure"
+      }
+    ];
+
+    const predictionsData = [
+      {
+        title: "A major FPS balance patch is likely within 2–4 weeks",
+        desc: "Based on active season timing, ranked sentiment, and previous cadence, at least one major shooter is likely to receive a meaningful gameplay rebalance soon."
+      },
+      {
+        title: "Publisher showcase activity should rise in the next reveal cycle",
+        desc: "Mid-year and event-season patterns historically trigger trailer drops, roadmap refreshes, first looks, and deeper gameplay showcases."
+      },
+      {
+        title: "One high-profile RPG faces elevated delay risk",
+        desc: "Large-scale RPGs with limited hands-on footage and inconsistent marketing often enter schedule risk zones as release windows approach."
+      },
+      {
+        title: "Esports metas will shift harder than expected after next patch wave",
+        desc: "Tournament ecosystems are especially sensitive to role efficiency, utility balance, and composition changes near major competitive milestones."
+      },
+      {
+        title: "Mobile gaming will keep gaining visibility through live-event strategy",
+        desc: "Timed events, crossover activations, and creator support continue to act as powerful audience growth tools across mobile ecosystems."
+      },
+      {
+        title: "Live-service fatigue will force stronger content cadence decisions",
+        desc: "Studios under retention pressure may need faster roadmap clarity, better event pacing, and more impactful progression refreshes."
+      }
+    ];
+
+    // =========================
+    // DOM
+    // =========================
+    const newsGrid = document.getElementById("newsGrid");
+    const trendingGrid = document.getElementById("trendingGrid");
+    const releasesGrid = document.getElementById("releasesGrid");
+    const esportsGrid = document.getElementById("esportsGrid");
+    const predictionsGrid = document.getElementById("predictionsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    let activeFilter = "all";
+
+    // =========================
+    // RENDER FUNCTIONS
+    // =========================
+    function renderNews(items){
+      newsGrid.innerHTML = "";
+
+      items.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${item.image}" alt="${escapeHtml(item.title)}" class="thumb" />
+          <span class="badge ${item.badgeClass}">${escapeHtml(item.badge)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.description)}</p>
+          <div class="meta">${escapeHtml(item.tag.toUpperCase())} // LIVE FEED</div>
+        `;
+        addTilt(card);
+        newsGrid.appendChild(card);
+      });
     }
 
-    const terminalObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && typewriter.textContent.trim() === "") {
-          typeLine();
-        }
+    function renderTrending(){
+      trendingGrid.innerHTML = "";
+      trendingGames.forEach(game => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${game.image}" alt="${escapeHtml(game.name)}" class="thumb" />
+          <h3>${escapeHtml(game.name)}</h3>
+          <p>${escapeHtml(game.desc)}</p>
+          <div class="meta">${escapeHtml(game.meta)}</div>
+        `;
+        addTilt(card);
+        trendingGrid.appendChild(card);
       });
-    }, { threshold: 0.35 });
+    }
 
-    if (typewriter) terminalObserver.observe(typewriter);
+    function renderReleases(){
+      releasesGrid.innerHTML = "";
+      releasesData.forEach(game => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${game.image}" alt="${escapeHtml(game.title)}" class="thumb" />
+          <h3>${escapeHtml(game.title)}</h3>
+          <p>${escapeHtml(game.desc)}</p>
+          <div class="meta">${escapeHtml(game.meta)}</div>
+        `;
+        addTilt(card);
+        releasesGrid.appendChild(card);
+      });
+    }
 
-    /* =========================
-       3D TILT PROJECT CARDS
-    ========================= */
-    const tiltCards = document.querySelectorAll(".tilt");
+    function renderEsports(){
+      esportsGrid.innerHTML = "";
+      esportsData.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <span class="badge badge-hot">Esports</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.desc)}</p>
+          <div class="meta">${escapeHtml(item.meta)}</div>
+        `;
+        addTilt(card);
+        esportsGrid.appendChild(card);
+      });
+    }
 
-    tiltCards.forEach(card => {
+    function renderPredictions(){
+      predictionsGrid.innerHTML = "";
+      predictionsData.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "card prediction";
+        card.innerHTML = `
+          <span class="badge badge-pro">Prediction</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.desc)}</p>
+          <div class="meta">EDITORIAL FORECAST</div>
+        `;
+        addTilt(card);
+        predictionsGrid.appendChild(card);
+      });
+    }
+
+    // =========================
+    // FILTER + SEARCH
+    // =========================
+    function updateNews(){
+      const query = searchInput.value.toLowerCase().trim();
+
+      const filtered = newsData.filter(item => {
+        const matchesFilter = activeFilter === "all" || item.tag === activeFilter;
+        const text = (item.title + " " + item.description + " " + item.tag).toLowerCase();
+        const matchesSearch = text.includes(query);
+        return matchesFilter && matchesSearch;
+      });
+
+      renderNews(filtered.length ? filtered : [{
+        title: "No matching stories found",
+        description: "Try a different search term or switch the category filter.",
+        tag: "all",
+        badge: "Search",
+        badgeClass: "badge-pro",
+        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80"
+      }]);
+    }
+
+    searchInput.addEventListener("input", updateNews);
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = btn.dataset.filter;
+        updateNews();
+      });
+    });
+
+    // =========================
+    // ANIMATIONS
+    // =========================
+    function addTilt(card){
       card.addEventListener("mousemove", (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-
-        const rotateX = ((y - centerY) / centerY) * -6;
-        const rotateY = ((x - centerX) / centerX) * 6;
-
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+        const rotateX = ((y - centerY) / centerY) * -4;
+        const rotateY = ((x - centerX) / centerX) * 4;
+        card.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
       });
 
       card.addEventListener("mouseleave", () => {
-        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0)";
+        card.style.transform = "";
       });
-    });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("show");
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    function animateCounter(id, target, duration = 1200){
+      const el = document.getElementById(id);
+      let start = 0;
+      const stepTime = Math.max(16, duration / target);
+
+      const timer = setInterval(() => {
+        start++;
+        el.textContent = start;
+        if(start >= target){
+          clearInterval(timer);
+        }
+      }, stepTime);
+    }
+
+    // =========================
+    // HELPERS
+    // =========================
+    function escapeHtml(str){
+      if(!str) return "";
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function fakeSubscribe(){
+      const email = document.getElementById("newsletterEmail").value.trim();
+      const msg = document.getElementById("subscribeMsg");
+      if(email){
+        msg.style.display = "block";
+        setTimeout(() => {
+          msg.style.display = "none";
+        }, 3000);
+        document.getElementById("newsletterEmail").value = "";
+      }
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    renderNews(newsData);
+    renderTrending();
+    renderReleases();
+    renderEsports();
+    renderPredictions();
+
+    animateCounter("countNews", 24);
+    animateCounter("countGames", 18);
+    animateCounter("countEvents", 9);
   </script>
 </body>
 </html>
